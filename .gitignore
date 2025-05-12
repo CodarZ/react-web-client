@@ -1,0 +1,38 @@
+# folder
+dist
+build
+*.local
+**/node_modules
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor directories and files
+.idea
+*.discard
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.*cache
+.vite-cache
+
+.husky/*
+!.husky/commit-msg
+!.husky/pre-commit
+
+# 项目生成的文件
+auto-imports.d.ts
+components.d.ts
+.eslintrc-auto-import.json
+
+# MacOS
+.DS_Store
+._*
