@@ -1,14 +1,14 @@
 import { ConfigProvider, theme } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
 import { RouterProvider } from 'react-router'
-import router from './router'
+import router from './routes'
 
 export default function App() {
   return (
     <ConfigProvider
       locale={zhCN}
       theme={{
-        algorithm: theme.darkAlgorithm,
+        algorithm: theme.defaultAlgorithm,
         cssVar: true,
       }}
     >

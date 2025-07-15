@@ -1,6 +1,6 @@
 export default {
   singleQuote: true,
-  printWidth: 100,
+  printWidth: 120,
   tabWidth: 2,
   quoteProps: 'as-needed',
   useTabs: false,

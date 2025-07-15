@@ -1,10 +1,10 @@
-import Layout from '@/layout'
+import Layout from '@/layouts/base/index'
 import Home from '@/views/home'
 import Login from '@/views/login'
-import { RouteObject } from 'react-router'
-
 import Error403 from '@/views/error/403'
 import Error404 from '@/views/error/404'
+
+import type { RouteObject } from 'react-router'
 
 /** 登录等独立路由配置 */
 const baseRoutes: RouteObject[] = [

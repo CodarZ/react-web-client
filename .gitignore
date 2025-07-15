@@ -31,7 +31,6 @@ lerna-debug.log*
 # 项目生成的文件
 auto-imports.d.ts
 components.d.ts
-.eslintrc-auto-import.json
 
 # MacOS
 .DS_Store
