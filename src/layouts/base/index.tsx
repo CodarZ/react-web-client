@@ -19,11 +19,6 @@ export default function BaseLayout() {
           src: userInfo?.avatar || '',
           title: userInfo?.nickname,
         }}
-        menu={{
-          request: async () => {
-            return []
-          },
-        }}
         location={{
           pathname: location.pathname,
         }}
