@@ -45,8 +45,22 @@ export function loadComponent(componentPath: string) {
     return componentCache.get(componentPath)!
   }
 
-  // 转换路径格式，将 @/views/home/Home 转换为 ../views/home/index
-  const normalizedPath = componentPath.replace('@/', '../').replace(/\/[A-Z][a-zA-Z0-9]*$/, '/index') // 将 /ComponentName 替换为 /index
+  // 转换路径格式
+  let normalizedPath = componentPath
+
+  if (componentPath.startsWith('@/views')) {
+    // 处理 @/views 开头的路径：@/views/home/index -> ../views/home/index
+    normalizedPath = componentPath.replace('@/', '../').replace(/\/[A-Z][a-zA-Z0-9]*$/, '/index')
+  } else if (componentPath.startsWith('/')) {
+    // 处理 / 开头的路径：/settings/role/index -> ../views/settings/role/index
+    normalizedPath = `../views${componentPath}`
+    // 如果路径不以 .tsx 结尾，添加 .tsx
+    if (!normalizedPath.endsWith('.tsx') && !normalizedPath.endsWith('.ts')) {
+      normalizedPath += '.tsx'
+    }
+  } else {
+    normalizedPath = componentPath
+  }
 
   try {
     // 使用 lazy 动态导入
