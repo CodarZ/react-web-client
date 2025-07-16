@@ -1,7 +1,18 @@
 import { createBrowserRouter } from 'react-router'
-import { baseRoutes, mainRoute } from './constants'
+import { baseRoutes, mainRoute, createMainRoute } from './constants'
+import { useRouteStore } from '@/stores/route'
 
-// 推荐使用这种方式，将独立路由与主应用路由合并
-const router = createBrowserRouter([...baseRoutes, mainRoute])
+// 创建路由器的函数
+export const createRouter = () => {
+  const { dynamicRoutes } = useRouteStore.getState()
+
+  // 如果有动态路由，使用带动态路由的主路由
+  const finalMainRoute = dynamicRoutes.length > 0 ? createMainRoute(dynamicRoutes) : mainRoute
+
+  return createBrowserRouter([...baseRoutes, finalMainRoute])
+}
+
+// 默认路由器
+const router = createRouter()
 
 export default router
