@@ -1,9 +1,11 @@
 import { ProLayout } from '@ant-design/pro-components'
 import { Outlet, useLocation, useNavigate } from 'react-router'
+import { useUserStore } from '@/stores/user'
 
 export default function BaseLayout() {
   const location = useLocation()
   const navigate = useNavigate()
+  const { userInfo } = useUserStore()
 
   if (typeof document === 'undefined') {
     return <div />
@@ -14,8 +16,8 @@ export default function BaseLayout() {
       <ProLayout
         layout="mix"
         avatarProps={{
-          src: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
-          title: '超级管理员',
+          src: userInfo?.avatar || '',
+          title: userInfo?.nickname,
         }}
         menu={{
           request: async () => {

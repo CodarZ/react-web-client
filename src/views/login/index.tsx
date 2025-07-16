@@ -1,13 +1,29 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Card, Form, Input, message } from 'antd'
+import { useUserStore } from '@/stores/user'
+import { useNavigate } from 'react-router'
 
 import type { FC } from 'react'
 
 const { Item } = Form
 
 const Login: FC = () => {
-  function onFinish() {
-    message.success('登录成功！')
+  const { setToken, setUserInfo } = useUserStore()
+  const navigate = useNavigate()
+  const onFinish = async () => {
+    // 设置token
+    setToken('token_example')
+
+    // 设置用户信息
+    setUserInfo({
+      id: '1',
+      nickname: '超级管理员',
+      username: 'admin',
+      roles: ['admin', 'static.sdf.editor'],
+      avatar: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
+    })
+    message.success('登录成功')
+    navigate('/')
   }
 
   return (

@@ -1,0 +1,41 @@
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+
+// 用户信息接口
+interface UserInfo {
+  id: string
+  nickname: string
+  username: string
+  avatar?: string
+  roles?: string[]
+}
+
+// 用户状态接口
+interface UserState {
+  userInfo: UserInfo | null
+  token: string | null
+  isLoggedIn: boolean
+  // 操作方法
+  setToken: (token: string) => void
+  setUserInfo: (userInfo: UserInfo) => void
+  clearUser: () => void
+}
+
+export const useUserStore = create<UserState>()(
+  persist(
+    (set) => ({
+      userInfo: null,
+      token: null,
+      isLoggedIn: false,
+
+      setToken: (token) => set({ token, isLoggedIn: !!token }),
+
+      setUserInfo: (userInfo) => set({ userInfo, isLoggedIn: true }),
+
+      clearUser: () => set({ userInfo: null, token: null, isLoggedIn: false }),
+    }),
+    {
+      name: 'user',
+    },
+  ),
+)
