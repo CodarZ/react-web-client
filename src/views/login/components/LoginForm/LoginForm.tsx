@@ -1,14 +1,17 @@
 import { LockOutlined, UserOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
-import { Button, Flex, Form, Input, Image, Checkbox } from 'antd'
-import type { AnyObject } from 'antd/es/_util/type'
+import { Button, Flex, Form, Input, Image, Checkbox, message } from 'antd'
 import fallbackImage from '@/assets/icons/fallback-image.png'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
+import { useUserStore } from '@/stores/user'
+import type { AnyObject } from 'antd/es/_util/type'
 
 export default function LoginForm() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [codeImage, setCodeImage] = useState('')
+
+  const { setToken, setUserInfo } = useUserStore()
 
   useEffect(() => {
     requestCodeImage()
@@ -19,13 +22,63 @@ export default function LoginForm() {
     setCodeImage('')
   }
 
-  function requestLogin(values: AnyObject) {
+  function requestToken(values: AnyObject): Promise<string | null> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // 模拟 token 获取，假设用户名为 admin 时成功
+        if (values.username === 'admin') {
+          resolve('mock-token-123')
+        } else {
+          message.error('获取登录 Token 失败')
+          resolve(null)
+        }
+      }, 800)
+    })
+  }
+
+  function requestUserInfo(token: string): Promise<AnyObject | null> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        if (token) {
+          resolve({
+            id: '1',
+            nickname: '超级管理员',
+            username: 'admin',
+            roles: ['admin', 'static.sdf.editor'],
+            avatar: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
+          })
+        } else {
+          message.error('获取用户信息失败')
+          resolve(null)
+        }
+      }, 800)
+    })
+  }
+
+  async function requestLogin(values: AnyObject) {
     console.log('模拟登录请求，提交的值：', values)
     setLoading(true)
-    setTimeout(() => {
+
+    // 获取 token
+    const token = await requestToken(values)
+    if (!token) {
       setLoading(false)
-      navigate('/')
-    }, 1000)
+      return
+    }
+    setToken(token)
+
+    // 获取用户信息
+    const userInfo = await requestUserInfo(token)
+    if (userInfo) {
+      setUserInfo(userInfo)
+    } else {
+      message.warning('用户信息获取失败')
+    }
+
+    message.success('登录成功')
+
+    setLoading(false)
+    navigate('/')
   }
 
   function onFinish(values: AnyObject) {
