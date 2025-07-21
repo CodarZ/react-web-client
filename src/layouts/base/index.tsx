@@ -2,25 +2,28 @@ import { ProLayout } from '@ant-design/pro-components'
 import { Outlet, useLocation, useNavigate } from 'react-router'
 import { Spin } from 'antd'
 import { useUserStore } from '@/stores/user'
-import { useRouteStore } from '@/stores/route'
-import { useRouteInitializer } from '@/hooks/useRouteInitializer'
-import { useRouteRecovery } from '@/hooks/useRouteRecovery'
+import { HomeOutlined } from '@ant-design/icons'
 
 export default function BaseLayout() {
+  const [loading] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
   const { userInfo } = useUserStore()
-  const { menuData } = useRouteStore()
-  const { loading } = useRouteInitializer()
-
-  // 处理页面刷新时的路由恢复
-  useRouteRecovery()
+  const menuData = [
+    {
+      key: '/',
+      path: '/',
+      name: '首页',
+      icon: <HomeOutlined />,
+      hideChildrenInMenu: false,
+      hideInMenu: false,
+    },
+  ]
 
   if (typeof document === 'undefined') {
     return <div />
   }
 
-  // 显示加载状态
   if (loading) {
     return (
       <div
@@ -31,7 +34,7 @@ export default function BaseLayout() {
           justifyContent: 'center',
         }}
       >
-        <Spin size="large" tip="正在加载系统..." />
+        <Spin size="large" />
       </div>
     )
   }

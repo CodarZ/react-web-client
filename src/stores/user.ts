@@ -35,12 +35,6 @@ export const useUserStore = create<UserState>()(
       clearUser: () => {
         // 清除用户信息时，同时清除动态路由
         set({ userInfo: null, token: null, isLoggedIn: false })
-
-        // 延迟清除路由，确保用户状态先更新
-        setTimeout(async () => {
-          const { useRouteStore } = await import('@/stores/route')
-          useRouteStore.getState().clearRoutes()
-        }, 0)
       },
     }),
     {
