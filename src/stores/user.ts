@@ -10,27 +10,16 @@ interface UserInfo {
   roles?: string[]
 }
 
-// 用户状态接口
-interface UserState {
-  userInfo: UserInfo | null
-  token: string | null
-  isLoggedIn: boolean
-  // 操作方法
-  setToken: (token: string) => void
-  setUserInfo: (userInfo: UserInfo) => void
-  clearUser: () => void
-}
-
-export const useUserStore = create<UserState>()(
+export const useUserStore = create()(
   persist(
     (set) => ({
       userInfo: null,
       token: null,
       isLoggedIn: false,
 
-      setToken: (token) => set({ token, isLoggedIn: !!token }),
+      setToken: (token: string) => set({ token, isLoggedIn: !!token }),
 
-      setUserInfo: (userInfo) => set({ userInfo, isLoggedIn: true }),
+      setUserInfo: (userInfo: UserInfo) => set({ userInfo, isLoggedIn: true }),
 
       clearUser: () => {
         // 清除用户信息时，同时清除动态路由
