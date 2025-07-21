@@ -1,53 +1,27 @@
-import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Card, Form, Input, message } from 'antd'
-import { useUserStore } from '@/stores/user'
-import { useNavigate } from 'react-router'
+import { Col, Row } from 'antd'
+import LoginBackgroundImage from '@/assets/login-bg.svg'
+import LoginBackground from './components/LoginBackground/LoginBackground'
+import LoginForm from './components/LoginForm/LoginForm'
+import './index.scss'
 
-import type { FC } from 'react'
-
-const { Item } = Form
-
-const Login: FC = () => {
-  const { setToken, setUserInfo } = useUserStore()
-  const navigate = useNavigate()
-  const onFinish = async () => {
-    // 设置token
-    setToken('token_example')
-
-    // 设置用户信息
-    setUserInfo({
-      id: '1',
-      nickname: '超级管理员',
-      username: 'admin',
-      roles: ['admin', 'static.sdf.editor'],
-      avatar: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
-    })
-    message.success('登录成功')
-    navigate('/')
-  }
-
+export default function LoginPage() {
   return (
-    <Card style={{ margin: '160px auto', maxWidth: '480px' }}>
-      <Form name="login" size={'large'} initialValues={{ remember: true }} onFinish={onFinish}>
-        <Item
-          name="username"
-          rules={[
-            { required: true, whitespace: true, message: '请输入用户名!' },
-            { pattern: /^[a-zA-Z0-9_]+$/, message: '必须是英文，数字或者下划线!' },
-          ]}
-        >
-          <Input prefix={<UserOutlined />} placeholder="用户名" />
-        </Item>
-        <Item name="password" rules={[{ required: true, message: '请输入密码!' }]}>
-          <Input.Password prefix={<LockOutlined />} type="password" placeholder="密码" />
-        </Item>
-        <Item>
-          <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
-            登 录
-          </Button>
-        </Item>
-      </Form>
-    </Card>
+    <div className="login">
+      <Row align="stretch" className="login-box">
+        <Col xs={0} sm={12} md={14}>
+          <div className="login-left">
+            <img className="login-left__img" src={LoginBackgroundImage} />
+          </div>
+        </Col>
+        <Col xs={24} sm={12} md={10}>
+          <div className="login-right">
+            <h3 className="login-right__title"> Web Client </h3>
+            <LoginForm />
+          </div>
+        </Col>
+      </Row>
+
+      <LoginBackground />
+    </div>
   )
 }
-export default Login
