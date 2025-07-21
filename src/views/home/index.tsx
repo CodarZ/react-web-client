@@ -1,9 +1,9 @@
+import { PageContainer, ProCard } from '@ant-design/pro-components'
+
 export default function Home() {
   return (
-    <div>
-      <div>
-        <h1>Home Page</h1>
-      </div>
-    </div>
+    <PageContainer>
+      <ProCard></ProCard>
+    </PageContainer>
   )
 }
