@@ -1,8 +1,9 @@
 import { createElement } from 'react'
+import { createIcon } from '@/components/Icon'
+import Error404 from '@/views/error/404'
+
 import type { RouteObject } from 'react-router'
 import type { MenuDataItem } from '@ant-design/pro-components'
-import { createIcon } from '@/components/Icon'
-
 // 页面模块文件
 const fileModules = import.meta.glob(
   [
@@ -87,10 +88,12 @@ function _loadPageFile(pagePath: string) {
     if (fileModules[path]) {
       return lazy(fileModules[path] as () => Promise<{ default: React.ComponentType }>)
     }
-    return lazy(() => import('@/views/error/404'))
+    // 使用静态导入的 404 页面
+    return Error404
   } catch (error) {
     console.error(`Failed to load component: ${pagePath}`, error)
-    return lazy(() => import('@/views/error/404'))
+    // 使用静态导入的 404 页面
+    return Error404
   }
 }
 
