@@ -36,7 +36,7 @@ export default function LoginForm() {
     })
   }
 
-  function requestUserInfo(token: string): Promise<AnyObject | null> {
+  function requestUserInfo(token: string): Promise<UserInfo | null> {
     return new Promise((resolve) => {
       setTimeout(() => {
         if (token) {
