@@ -1,9 +1,6 @@
+import Image404 from '@/assets/icons/404.svg'
+import ErrorPage from './components/error'
+
 export default function Error404() {
-  return (
-    <div>
-      <div>
-        <h1>Error 404</h1>
-      </div>
-    </div>
-  )
+  return <ErrorPage image={Image404} imageAlt="404 Not Found" subtitle="当前页面不存在..." />
 }

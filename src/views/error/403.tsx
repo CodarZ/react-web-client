@@ -1,9 +1,6 @@
+import Image403 from '@/assets/icons/403.svg'
+import ErrorPage from './components/error'
+
 export default function Error403() {
-  return (
-    <div>
-      <div>
-        <h1>Error 403</h1>
-      </div>
-    </div>
-  )
+  return <ErrorPage image={Image403} imageAlt="403 Forbidden" subtitle="当前页面没有权限访问..." />
 }
