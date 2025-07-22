@@ -14,7 +14,7 @@ export const useIcon = (name: string): React.ReactElement | null => {
     const IconComponent = (AntdIcons as unknown as Record<string, React.ComponentType>)[name]
 
     if (!IconComponent) {
-      console.warn(`Icon "${name}" not found in @ant-design/icons`)
+      // console.warn(`Icon "${name}" not found in @ant-design/icons`)
       return null
     }
 
@@ -33,7 +33,7 @@ export const createIcon = (name: string): React.ReactElement | null => {
   const IconComponent = (AntdIcons as unknown as Record<string, React.ComponentType>)[name]
 
   if (!IconComponent) {
-    console.warn(`Icon "${name}" not found in @ant-design/icons`)
+    // console.warn(`Icon "${name}" not found in @ant-design/icons`)
     return createElement(AppstoreOutlined)
   }
 

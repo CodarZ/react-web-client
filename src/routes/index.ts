@@ -1,8 +1,13 @@
 import { createBrowserRouter } from 'react-router'
-import { baseRoutes } from './constants'
+import { baseRoutes, createMainRoutes } from './constants'
+import { useRouteStore } from '@/stores'
 
-export const createRouter = () => {
-  return createBrowserRouter([...baseRoutes])
+export function createRouter() {
+  const { dynamicRoutes } = useRouteStore.getState()
+
+  const finalMainRoute = createMainRoutes(dynamicRoutes || [])
+
+  return createBrowserRouter([...baseRoutes, finalMainRoute])
 }
 
 const router = createRouter()

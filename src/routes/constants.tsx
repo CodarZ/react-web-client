@@ -1,11 +1,16 @@
-import type { RouteObject } from 'react-router'
 import { Navigate } from 'react-router'
 import Layout from '@/layouts/base/index'
 import Home from '@/views/home'
 import Login from '@/views/login'
 import Error403 from '@/views/error/403'
 import Error404 from '@/views/error/404'
+import Error500 from '@/views/error/500'
 
+import type { RouteObject } from 'react-router'
+
+/**
+ * 基础路由, 渲染组件页面
+ */
 export const baseRoutes: RouteObject[] = [
   {
     path: '/login',
@@ -14,7 +19,10 @@ export const baseRoutes: RouteObject[] = [
   {
     path: '/redirect',
   },
-  {
+]
+
+export function createMainRoutes(dynamicRoutes: RouteObject[] = []): RouteObject {
+  return {
     path: '/',
     element: <Layout />,
     children: [
@@ -22,6 +30,7 @@ export const baseRoutes: RouteObject[] = [
         index: true,
         element: <Home />,
       },
+      ...dynamicRoutes,
       {
         path: '/error',
         children: [
@@ -37,6 +46,10 @@ export const baseRoutes: RouteObject[] = [
             path: '403',
             element: <Error403 />,
           },
+          {
+            path: '500',
+            element: <Error500 />,
+          },
         ],
       },
       {
@@ -44,5 +57,5 @@ export const baseRoutes: RouteObject[] = [
         element: <Navigate to="/error/404" replace />,
       },
     ],
-  },
-]
+  }
+}

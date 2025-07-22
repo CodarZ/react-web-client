@@ -1,23 +1,14 @@
 import { ProLayout } from '@ant-design/pro-components'
 import { Outlet, useLocation, useNavigate } from 'react-router'
 
-import { useUserStore } from '@/stores/user'
-import { HomeOutlined } from '@ant-design/icons'
+import { useUserStore, useRouteStore } from '@/stores'
 
 export default function BaseLayout() {
   const location = useLocation()
   const navigate = useNavigate()
   const { userInfo } = useUserStore()
-  const menuData = [
-    {
-      key: '/',
-      path: '/',
-      name: '首页',
-      icon: <HomeOutlined />,
-      hideChildrenInMenu: false,
-      hideInMenu: false,
-    },
-  ]
+
+  const { menuData } = useRouteStore()
 
   if (typeof document === 'undefined') {
     return <div />

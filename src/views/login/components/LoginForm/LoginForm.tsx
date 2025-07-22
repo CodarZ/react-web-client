@@ -3,7 +3,7 @@ import { Button, Flex, Form, Input, Image, Checkbox, message } from 'antd'
 import fallbackImage from '@/assets/icons/fallback-image.png'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores'
 import type { AnyObject } from 'antd/es/_util/type'
 
 export default function LoginForm() {

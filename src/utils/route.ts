@@ -55,6 +55,8 @@ export function transToRouteObject(routes: RouteType[]) {
 
     // 对于特殊容器, 需要特殊处理
     if (!route.component || route.component === 'Layout' || route.component === 'ParentView') {
+      // ...
+    } else {
       const file = _loadPageFile(route.component)
       if (file) {
         routeObject.element = createElement(file)
@@ -84,7 +86,7 @@ function _loadPageFile(pagePath: string) {
       return
     }
 
-    const path = `../views/${pagePath}/index.tsx`
+    const path = `../views/${pagePath}.tsx`
     if (fileModules[path]) {
       return lazy(fileModules[path] as () => Promise<{ default: React.ComponentType }>)
     }

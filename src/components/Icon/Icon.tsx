@@ -21,7 +21,7 @@ const Icon: React.FC<IconProps> = ({ name, ...restProps }) => {
   const IconComponent = (AntdIcons as unknown as Record<string, React.ComponentType<Omit<IconProps, 'name'>>>)[name]
 
   if (!IconComponent) {
-    console.warn(`Icon "${name}" not found in @ant-design/icons`)
+    // console.warn(`Icon "${name}" not found in @ant-design/icons`)
     return null
   }
 

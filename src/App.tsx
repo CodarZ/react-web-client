@@ -1,9 +1,24 @@
 import { ConfigProvider, theme, App as AntdApp } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
 import { RouterProvider } from 'react-router'
-import router from './routes'
+import { createRouter } from './routes'
+import { useRouteStore } from '@/stores'
 
 export default function App() {
+  const { initialized, initRoutes } = useRouteStore()
+  const [router, setRouter] = useState(() => createRouter())
+  const [routerKey, setRouterKey] = useState(0)
+
+  useEffect(() => {
+    if (initialized) {
+      const newRouter = createRouter()
+      setRouter(newRouter)
+      setRouterKey((prev) => prev + 1)
+    } else {
+      initRoutes()
+    }
+  }, [initialized, initRoutes])
+
   return (
     <ConfigProvider
       locale={zhCN}
@@ -13,7 +28,7 @@ export default function App() {
       }}
     >
       <AntdApp>
-        <RouterProvider router={router} />
+        <RouterProvider key={routerKey} router={router} />
       </AntdApp>
     </ConfigProvider>
   )
