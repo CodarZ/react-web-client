@@ -1,6 +1,7 @@
 import { createElement } from 'react'
 import type { RouteObject } from 'react-router'
 import type { MenuDataItem } from '@ant-design/pro-components'
+import { createIcon } from '@/components/Icon'
 
 // 页面模块文件
 const fileModules = import.meta.glob(
@@ -24,7 +25,7 @@ export function transToMenuDataItem(routes: RouteType[]): MenuDataItem[] {
       key: '/',
       path: '/',
       name: '首页',
-      icon: 'HomeOutlined',
+      icon: createIcon('HomeOutlined'),
       hideChildrenInMenu: false,
       hideInMenu: false,
     },
@@ -34,7 +35,7 @@ export function transToMenuDataItem(routes: RouteType[]): MenuDataItem[] {
     key: route.path,
     path: route.path,
     name: route.meta.title,
-    icon: route.meta.icon,
+    icon: createIcon(route.meta.icon),
     hideChildrenInMenu: route.hidden,
     hideInMenu: route.hidden,
     children,
