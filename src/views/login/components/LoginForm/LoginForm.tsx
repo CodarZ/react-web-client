@@ -2,16 +2,15 @@ import { LockOutlined, UserOutlined, SafetyCertificateOutlined } from '@ant-desi
 import { Button, Flex, Form, Input, Image, Checkbox, message } from 'antd'
 import fallbackImage from '@/assets/icons/fallback-image.png'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router'
-import { useUserStore } from '@/stores'
+import { useUserStore, useRouteStore } from '@/stores'
 import type { AnyObject } from 'antd/es/_util/type'
 
 export default function LoginForm() {
-  const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [codeImage, setCodeImage] = useState('')
 
   const { setToken, setUserInfo } = useUserStore()
+  const { initRoutes } = useRouteStore()
 
   useEffect(() => {
     requestCodeImage()
@@ -75,10 +74,21 @@ export default function LoginForm() {
       message.warning('用户信息获取失败')
     }
 
-    message.success('登录成功')
+    // 必须等待，初始化路由后，才能进入系统。否则没有路由信息匹配不到的
+    await initRoutes()
 
-    setLoading(false)
-    navigate('/')
+    const { initialized: currentInitialized } = useRouteStore.getState()
+
+    if (currentInitialized) {
+      message.success('登录成功')
+
+      setTimeout(() => {
+        setLoading(false)
+        window.location.href = '/'
+      }, 500)
+    } else {
+      setLoading(false)
+    }
   }
 
   function onFinish(values: AnyObject) {

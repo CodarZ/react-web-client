@@ -16,8 +16,6 @@ interface RouteState {
   menuData: MenuDataItem[]
   /** 动态路由, 需要添加到 router 路由表渲染文件 */
   dynamicRoutes: RouteObject[]
-  /** 加载状态 */
-  loading: boolean
   /** 是否已初始化, 用于判断是否需要重新加载路由 */
   initialized: boolean
 
@@ -33,41 +31,32 @@ export const useRouteStore = create<RouteState>()(
     (set, get) => ({
       systemRoutes: [],
       dynamicRoutes: [],
-      menuData: [],
-      loading: false,
+      menuData: getDefaultMenuDataItem(),
       initialized: false,
 
       initRoutes: async () => {
-        const { initialized, loading } = get()
+        const { initialized } = get()
 
-        if (initialized || loading) return
+        if (initialized) return
 
-        set({ loading: true })
+        // 步骤1: 请求路由信息
+        const systemRoutes = await getSystemRoutes()
 
-        try {
-          // 步骤1: 请求路由信息
-          const systemRoutes = await getSystemRoutes()
+        // 步骤2: 格式化为菜单数据
+        const dynamicMenuDataItem = transToMenuDataItem(systemRoutes)
+        const menuData = [...dynamicMenuDataItem]
 
-          // 步骤2: 格式化为菜单数据
-          const dynamicMenuDataItem = transToMenuDataItem(systemRoutes)
-          const menuData = [...dynamicMenuDataItem]
+        // 步骤3: 转换为动态路由对象
+        const dynamicRoutes = transToRouteObject(systemRoutes)
 
-          // 步骤3: 转换为动态路由对象
-          const dynamicRoutes = transToRouteObject(systemRoutes)
+        console.log('初始化路由信息成功:', { systemRoutes, menuData, dynamicRoutes })
 
-          console.log('初始化路由信息成功:', { systemRoutes, menuData, dynamicRoutes })
-
-          set({
-            systemRoutes,
-            menuData,
-            dynamicRoutes,
-            initialized: true,
-            loading: false,
-          })
-        } catch (error) {
-          console.error('初始化路由信息失败:', error)
-          set({ loading: false })
-        }
+        set({
+          systemRoutes,
+          menuData,
+          dynamicRoutes,
+          initialized: true,
+        })
       },
 
       rebuildFromCache: () => {
@@ -80,7 +69,6 @@ export const useRouteStore = create<RouteState>()(
             menuData,
             dynamicRoutes,
             initialized: true,
-            loading: false,
           })
         } else {
           set({
@@ -88,7 +76,6 @@ export const useRouteStore = create<RouteState>()(
             dynamicRoutes: [],
             menuData: getDefaultMenuDataItem(),
             initialized: true,
-            loading: false,
           })
         }
       },
@@ -99,7 +86,6 @@ export const useRouteStore = create<RouteState>()(
           dynamicRoutes: [],
           menuData: getDefaultMenuDataItem(),
           initialized: false,
-          loading: false,
         })
       },
     }),
