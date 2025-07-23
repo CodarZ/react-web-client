@@ -1,3 +1,4 @@
+import { clearToken, setToken } from '@/utils'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -19,13 +20,17 @@ export const useUserStore = create<UserState>()(
       token: null,
       isLoggedIn: false,
 
-      setToken: (token) => set({ token, isLoggedIn: !!token }),
+      setToken: (token) => {
+        setToken(token)
+        set({ token, isLoggedIn: !!token })
+      },
 
       setUserInfo: (userInfo) => set({ userInfo, isLoggedIn: true }),
 
       clearUser: () => {
         // 清除用户信息时，同时清除动态路由
         set({ userInfo: null, token: null, isLoggedIn: false })
+        clearToken()
       },
     }),
     {
