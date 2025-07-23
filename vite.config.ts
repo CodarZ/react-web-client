@@ -36,7 +36,7 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks: {
             react: ['react', 'react-dom', 'react-router'],
-            antd: ['@ant-design/v5-patch-for-react-19', 'antd'],
+            antd: ['@ant-design/v5-patch-for-react-19', 'antd', '@ant-design/cssinjs'],
             'antd-pro': ['@ant-design/pro-components'],
             icons: ['@ant-design/icons'],
             utils: ['dayjs', 'zustand'],
