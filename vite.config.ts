@@ -47,7 +47,16 @@ export default defineConfig(({ mode }) => {
     server: {
       host: '0.0.0.0',
       port: 5166,
-      proxy: {},
+      proxy: {
+        // 本地跨域代理 -> 代理到服务器的接口地址
+        '/api': {
+          // ws: true,
+          target: ENV.VITE_API_SERVICE_URL,
+          secure: false,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''), // /api/getInfo   -> http://[VITE_API_SERVICE_URL]/getInfo
+        },
+      },
     },
   }
 })

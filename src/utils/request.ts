@@ -7,7 +7,8 @@ import { STATUS_MESSAGE, type STATUS_MESSAGE_KEY } from '@/constants/enums'
 import { getToken } from './token'
 import router from '@/routes'
 
-import type { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+import type { AnyObject } from 'antd/es/_util/type'
+import type { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 
 NProgress.configure({ showSpinner: false })
 const abortControllerMap = new Map()
@@ -15,9 +16,10 @@ const abortControllerMap = new Map()
 /**
  * baseURL
  *   1. 当 Dev 环境时，因为接口前缀(如: `/api`), 由 vite.config.ts 中 proxy 中转发。
- *   2. 当 Prod 环境中有多个服务地址，需要到 interceptors.request 劫持根据接口前缀, 动态修改请求地址。
+ *   2. 当 Prod 环境中有多个服务地址，需要到 _requestInterceptor 劫持根据接口前缀, 动态修改请求地址。
  */
 const baseAxiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_API_SERVICE_URL,
   timeout: 300000,
 })
 
@@ -29,6 +31,11 @@ baseAxiosInstance.interceptors.response.use(_responseInterceptor, _responseError
 
 function _requestInterceptor<T>(config: InternalAxiosRequestConfig<T>) {
   NProgress.start()
+
+  // 生产环境去掉多余的前缀, 开发环境走代理
+  if (import.meta.env.PROD && config.url?.startsWith('/api')) {
+    config.url = config.url.replace(/^\/api/, '')
+  }
 
   const token = getToken()
   // 如果 token 不为空且不存在自定义 token, 则为所有请求附加上 token
@@ -77,3 +84,13 @@ function _responseErrorInterceptor(error: AxiosError) {
 
   return Promise.reject(error)
 }
+
+/** 适配 openapi-ts-request  */
+async function request<T = AnyObject>(url: string, options: AxiosRequestConfig = {}) {
+  return await baseAxiosInstance.request<T, T>({
+    url,
+    ...options,
+  })
+}
+
+export default request
