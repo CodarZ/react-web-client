@@ -1,5 +1,6 @@
 import { useEffect, useCallback } from 'react'
 import { useUserStore, useRouteStore } from '@/stores'
+import { getToken } from '@/utils'
 
 /**
  * Token 检测 Hook
@@ -10,7 +11,7 @@ export function useTokenCheck() {
   const { clearRoutes } = useRouteStore()
 
   const checkAndClearToken = useCallback(() => {
-    if (!token || token.trim() === '') {
+    if (!token || token.trim() === '' || !getToken()) {
       clearUser()
       clearRoutes()
       return false

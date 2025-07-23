@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router'
 import { useUserStore } from '@/stores'
+import { getToken } from '@/utils'
 
 interface RouterGuardProps {
   children: React.ReactNode
@@ -13,7 +14,7 @@ export default function RouterGuard({ children }: RouterGuardProps) {
   const { token } = useUserStore()
 
   // 如果没有token或token为空，直接重定向到登录页
-  if (!token || token.trim() === '') {
+  if (!token || token.trim() === '' || !getToken()) {
     return <Navigate to="/login" replace />
   }
 
