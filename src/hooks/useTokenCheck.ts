@@ -13,10 +13,6 @@ export function useTokenCheck() {
     if (!token || token.trim() === '') {
       clearUser()
       clearRoutes()
-
-      if (window.location.pathname !== '/login') {
-        window.location.href = '/login'
-      }
       return false
     }
     return true

@@ -5,6 +5,7 @@ import Login from '@/views/login'
 import Error403 from '@/views/error/403'
 import Error404 from '@/views/error/404'
 import Error500 from '@/views/error/500'
+import RouterGuard from '@/components/RouterGuard'
 
 import type { RouteObject } from 'react-router'
 
@@ -24,7 +25,11 @@ export const baseRoutes: RouteObject[] = [
 export function createMainRoutes(dynamicRoutes: RouteObject[] = []): RouteObject {
   return {
     path: '/',
-    element: <Layout />,
+    element: (
+      <RouterGuard>
+        <Layout />
+      </RouterGuard>
+    ),
     children: [
       {
         index: true,
