@@ -2,7 +2,9 @@ import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import { LockOutlined, PictureOutlined, SafetyCertificateOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Flex, Form, Image, Input, message, theme } from 'antd';
+import { Button, Checkbox, Flex, Form, Image, Input, theme } from 'antd';
+
+import { message } from '@/libs/antd-static';
 
 interface LoginFormValues {
   username: string;

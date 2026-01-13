@@ -5,6 +5,8 @@ import zhCN from 'antd/locale/zh_CN';
 
 import { router } from '@/routes/-index';
 
+import { AntdStaticProvider } from './libs/antd-static';
+
 export default function App() {
   return (
     <ConfigProvider
@@ -20,6 +22,7 @@ export default function App() {
       }}
     >
       <AntdApp message={{ maxCount: 3 }} notification={{ maxCount: 3 }}>
+        <AntdStaticProvider />
         <RouterProvider router={router} />
       </AntdApp>
     </ConfigProvider>
