@@ -130,4 +130,5 @@
     "**/*.{yaml,lock}": true,
     "**/*{biome,eslint,prettier,stylelint}*": true
   },
+  "typescript.tsdk": "node_modules/typescript/lib",
 }

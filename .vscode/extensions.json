@@ -3,6 +3,7 @@
     "biomejs.biome",
     "esbenp.prettier-vscode",
     "christian-kohler.npm-intellisense",
-    "christian-kohler.path-intellisense"
+    "christian-kohler.path-intellisense",
+    "clinyong.vscode-css-modules"
   ]
 }
