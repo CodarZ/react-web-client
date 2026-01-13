@@ -1,9 +1,0 @@
-{
-  "recommendations": [
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "christian-kohler.path-intellisense",
-    "foxundermoon.shell-format",
-    "maggie.eslint-rules-zh-plugin"
-  ]
-}
