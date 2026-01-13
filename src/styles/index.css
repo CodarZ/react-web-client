@@ -1,0 +1,5 @@
+@import 'antd/dist/reset.css';
+
+@import './common/global.css';
+
+@import './reset/index.css';

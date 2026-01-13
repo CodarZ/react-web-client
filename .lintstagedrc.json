@@ -1,0 +1,8 @@
+{
+  "*.{js,jsx,ts,tsx,cjs,mjs,d.ts,d.cts,d.mts}": [
+    "biome check --write --unsafe --no-errors-on-unmatched",
+    "prettier --write"
+  ],
+  "*.{json,jsonc}": ["biome check --write --unsafe --no-errors-on-unmatched", "prettier --write"],
+  "*.{css,less,scss,html,md}": ["prettier --write"]
+}

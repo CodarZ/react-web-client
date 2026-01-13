@@ -1,0 +1,58 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.3.11/schema.json",
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true, "defaultBranch": "master" },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": ["**", "!!**/dist", "!!**/*.min.*", "!!**/auto"]
+  },
+  "formatter": { "enabled": false },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "correctness": {
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error",
+        "noConstAssign": "error",
+        "noSelfAssign": "error",
+        "noUndeclaredVariables": "error",
+        "useIsNan": "error"
+      },
+      "security": {
+        "noGlobalEval": "error"
+      },
+      "performance": {
+        "noBarrelFile": "off",
+        "noReExportAll": "off"
+      },
+      "style": {
+        "useConst": "warn",
+        "useExportType": "warn",
+        "noImplicitBoolean": "warn",
+        "useBlockStatements": "off",
+        "noNonNullAssertion": "error"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "error",
+        "noImplicitAnyLet": "error",
+        "noExportsInTest": "error",
+        "noRedeclare": "error"
+      },
+      "a11y": "off"
+    }
+  },
+  "javascript": {},
+  "json": {
+    "parser": {
+      "allowComments": true,
+      "allowTrailingCommas": true
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "off"
+      }
+    }
+  }
+}

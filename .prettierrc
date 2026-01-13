@@ -1,0 +1,43 @@
+{
+  "printWidth": 120,
+  "tabWidth": 2,
+  "useTabs": false,
+  "endOfLine": "lf",
+  "semi": true,
+  "singleQuote": true,
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "jsxSingleQuote": false,
+  "trailingComma": "all",
+  "arrowParens": "always",
+  "singleAttributePerLine": false,
+  "htmlWhitespaceSensitivity": "ignore",
+  "importOrderSeparation": true,
+  "cssDeclarationSorterOrder": "concentric-css",
+  "plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-css-order"],
+  "importOrder": [
+    "^node:(.*)$|^(path$)",
+
+    "^(vite(.*)$)|^(@vitejs/(.*)$)",
+
+    "^(react/(.*)$)|^(react$)|^(react-dom(.*)$)|^@tanstack/(.*)$",
+
+    "^@ant-design/(.*)$|^antd(.*)$",
+
+    "^axios(.*)$|^ahooks(.*)$|^dayjs(.*)$|^radash(.*)$|^zustand(.*)$|^zod(.*)$",
+
+    "<THIRD_PARTY_MODULES>",
+
+    "^@/hooks/(.*)$|^@/stores/(.*)$|^@/libs/(.*)$",
+
+    "^@/apis/(.*)$",
+
+    "^@/constants/(.*)$|^@/utils/(.*)$|^@/configs/(.*)$",
+
+    "^@/assets/(.*)$|^@/layouts/(.*)$|^@/components/(.*)$",
+
+    "^@/views/(.*)$",
+
+    "^(?:/|\\.\\.?/)"
+  ]
+}

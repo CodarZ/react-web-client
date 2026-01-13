@@ -1,0 +1,40 @@
+# 静态资源
+public
+*.min.*
+
+# 核心依赖与构建产物 (Core & Build)
+node_modules
+dist
+dist-ssr
+build
+coverage
+
+# 包管理锁定文件 (Package Managers)
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# 本地环境配置 (Environment)
+env/
+.env
+.env.*
+!.env.example
+
+# 工具与IDE配置 (Tools & IDEs)
+.idea
+.vscode
+.DS_Store
+*.pem
+*.log
+*.sh
+
+# Husky (Git Hooks)
+.husky/_
+
+# 自动生成
+routeTree.gen.ts
+**/auto/**
+
+# 本地文件
+discard
+*.local
