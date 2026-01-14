@@ -1,15 +1,32 @@
 import { useNavigate } from '@tanstack/react-router';
+import { useState } from 'react';
 
 import {
+  CheckOutlined,
   DesktopOutlined,
   LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   MoonOutlined,
+  ReloadOutlined,
+  SettingOutlined,
   SunOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Avatar, Button, Dropdown, Flex, Layout, theme, Typography, type MenuProps } from 'antd';
+import {
+  Avatar,
+  Button,
+  Card,
+  Divider,
+  Drawer,
+  Dropdown,
+  Flex,
+  Layout,
+  theme,
+  Tooltip,
+  Typography,
+  type MenuProps,
+} from 'antd';
 
 import { Route as LoginRoute } from '@/routes/(auth)/login';
 
@@ -17,8 +34,18 @@ import { useDeviceDarkTheme } from '@/hooks/useDeviceDarkTheme';
 import { message, modal } from '@/libs/antd-static';
 import { useAppStore, type ThemeMode } from '@/stores/useAppStore';
 
+import autoSvg from '../assets/theme/auto.svg';
+import darkSvg from '../assets/theme/dark.svg';
+import lightSvg from '../assets/theme/light.svg';
+
 const { Header: AntHeader } = Layout;
 const { Text } = Typography;
+
+const themeOptions = [
+  { key: 'light', label: '浅色', icon: <SunOutlined />, svg: lightSvg },
+  { key: 'dark', label: '深色', icon: <MoonOutlined />, svg: darkSvg },
+  { key: 'auto', label: '跟随设备', icon: <DesktopOutlined />, svg: autoSvg },
+];
 
 /** 头部导航栏组件 */
 export function Header(props: { collapsed: boolean; onToggleCollapse: () => void }) {
@@ -31,6 +58,8 @@ export function Header(props: { collapsed: boolean; onToggleCollapse: () => void
   const prefersDark = useDeviceDarkTheme();
 
   const isDark = appState.themeMode === 'auto' ? prefersDark : appState.themeMode === 'dark';
+
+  const [settingsDrawer, setSettingsDrawer] = useState(false);
 
   const items: MenuProps['items'] = [
     {
@@ -76,54 +105,173 @@ export function Header(props: { collapsed: boolean; onToggleCollapse: () => void
   }
 
   return (
-    <AntHeader
-      style={{
-        padding: 0,
-        background: token.colorBgContainer,
-        backdropFilter: 'blur(8px) saturate(180%) brightness(1.1)',
-        WebkitBackdropFilter: 'blur(8px) saturate(180%) brightness(1.1)',
-        borderBottom: `1px solid ${token.colorSplit}`,
-        position: 'sticky',
-        top: 0,
-        zIndex: token.zIndexPopupBase - 10,
-      }}
-    >
-      <Flex align="center" justify="space-between">
-        <Button
-          type="text"
-          icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-          onClick={onToggleCollapse}
-          style={{
-            height: token.Layout?.headerHeight || 64,
-            width: token.Layout?.headerHeight || 64,
-            fontSize: token.fontSizeLG,
-          }}
-        />
-
-        <Flex gap={token.padding} style={{ paddingRight: token.padding }}>
-          <Dropdown
-            trigger={['click']}
-            placement="bottomRight"
-            styles={{ root: { width: 150 } }}
-            menu={{
-              selectable: true,
-              selectedKeys: [appState.themeMode],
-              onSelect: (e) => appState.setThemeMode(e.key as ThemeMode),
-              items: [
-                { key: 'light', label: '浅色', icon: <SunOutlined /> },
-                { key: 'dark', label: '深色', icon: <MoonOutlined /> },
-                { key: 'auto', label: '跟随设备', icon: <DesktopOutlined /> },
-              ],
+    <>
+      <AntHeader
+        style={{
+          padding: 0,
+          background: token.colorBgContainer,
+          backdropFilter: 'blur(8px) saturate(180%) brightness(1.1)',
+          WebkitBackdropFilter: 'blur(8px) saturate(180%) brightness(1.1)',
+          borderBottom: `1px solid ${token.colorSplit}`,
+          position: 'sticky',
+          top: 0,
+          zIndex: token.zIndexPopupBase - 10,
+        }}
+      >
+        <Flex align="center" justify="space-between">
+          <Button
+            type="text"
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={onToggleCollapse}
+            style={{
+              height: token.Layout?.headerHeight || 64,
+              width: token.Layout?.headerHeight || 64,
+              fontSize: token.fontSizeLG,
             }}
-          >
-            <Button type="text" icon={isDark ? <MoonOutlined /> : <SunOutlined />} />
-          </Dropdown>
+          />
 
-          <Dropdown menu={{ items }} placement="bottomRight" trigger={['click']} styles={{ root: { width: 160 } }}>
-            <Avatar size={32} icon={<UserOutlined />} style={{ cursor: 'pointer' }} />
-          </Dropdown>
+          <Flex gap={token.padding} style={{ paddingRight: token.padding }}>
+            <Dropdown
+              trigger={['click']}
+              placement="bottomRight"
+              styles={{ root: { width: 150 } }}
+              menu={{
+                selectable: true,
+                selectedKeys: [appState.themeMode],
+                onSelect: (e) => appState.setThemeMode(e.key as ThemeMode),
+                items: themeOptions,
+              }}
+            >
+              <Button type="text" icon={isDark ? <MoonOutlined /> : <SunOutlined />} />
+            </Dropdown>
+
+            <Button type="text" icon={<SettingOutlined />} onClick={() => setSettingsDrawer(true)} />
+
+            <Dropdown menu={{ items }} placement="bottomRight" trigger={['click']} styles={{ root: { width: 160 } }}>
+              <Avatar size={32} icon={<UserOutlined />} style={{ cursor: 'pointer' }} />
+            </Dropdown>
+          </Flex>
         </Flex>
+      </AntHeader>
+
+      <SettingsDrawer open={settingsDrawer} onClose={() => setSettingsDrawer(false)} />
+    </>
+  );
+}
+
+function SettingsDrawer(props: { open: boolean; onClose: () => void }) {
+  const { open, onClose } = props;
+  const { token } = theme.useToken();
+  const appState = useAppStore();
+
+  const primaryColors = [
+    '#1677ff',
+    '#0091ff',
+    '#f5222d',
+    '#fa8c16',
+    '#fadb14',
+    '#13c2c2',
+    '#52c41a',
+    '#2f54eb',
+    '#722ed1',
+  ];
+
+  return (
+    <Drawer
+      title={
+        <Flex align="center" justify="space-between" style={{ width: '100%' }}>
+          <Text strong={true}>系统配置</Text>
+          <Tooltip title="重置设置">
+            <Button
+              type="text"
+              size="small"
+              icon={<ReloadOutlined style={{ fontSize: 12 }} />}
+              onClick={() => appState.resetAppState()}
+            />
+          </Tooltip>
+        </Flex>
+      }
+      placement="right"
+      onClose={onClose}
+      open={open}
+      styles={{ body: { background: token.colorBgContainer } }}
+      closable={true}
+      size={340}
+    >
+      <Flex vertical={true} gap={24}>
+        <section>
+          <Text strong={true} style={{ display: 'block', marginBottom: 16 }}>
+            主题模式
+          </Text>
+
+          <Flex gap={12} justify="space-between">
+            {themeOptions.map((opt) => {
+              const isActive = appState.themeMode === opt.key;
+              return (
+                <Flex
+                  key={opt.key}
+                  vertical={true}
+                  align="center"
+                  gap={8}
+                  style={{ flex: 1, cursor: 'pointer', position: 'relative' }}
+                  onClick={() => appState.setThemeMode(opt.key as ThemeMode)}
+                >
+                  <Card
+                    hoverable={true}
+                    styles={{ body: { padding: 4 } }}
+                    style={{
+                      width: '100%',
+                      borderRadius: 8,
+                      border: isActive ? `2px solid ${token.colorPrimary}` : `2px solid transparent`,
+                      backgroundColor: token.colorFillAlter,
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <img src={opt.svg} alt={opt.label} style={{ width: '100%', display: 'block' }} />
+                  </Card>
+                  <Text style={{ fontSize: token.fontSizeSM }} type={isActive ? undefined : 'secondary'}>
+                    {opt.label}
+                  </Text>
+                </Flex>
+              );
+            })}
+          </Flex>
+        </section>
+
+        <Divider style={{ margin: 0 }} />
+
+        {/* 主题色 */}
+        <section>
+          <Text strong={true} style={{ display: 'block', marginBottom: 16 }}>
+            主题色
+          </Text>
+          <Flex wrap="wrap" gap={8}>
+            {primaryColors.map((color) => {
+              const isActive = appState.colorPrimary === color;
+              return (
+                <Tooltip key={color} title={color}>
+                  <div
+                    style={{
+                      width: 24,
+                      height: 24,
+                      borderRadius: 4,
+                      backgroundColor: color,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'all 0.3s',
+                    }}
+                    onClick={() => appState.setColorPrimary(color)}
+                  >
+                    {isActive && <CheckOutlined style={{ fontSize: 12 }} />}
+                  </div>
+                </Tooltip>
+              );
+            })}
+          </Flex>
+        </section>
       </Flex>
-    </AntHeader>
+    </Drawer>
   );
 }

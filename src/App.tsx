@@ -21,7 +21,9 @@ export default function App() {
       locale={zhCN}
       theme={{
         algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
-        token: {},
+        token: {
+          colorPrimary: appState.colorPrimary,
+        },
         components: {
           Layout: {
             headerHeight: 64,
