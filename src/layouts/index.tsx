@@ -9,9 +9,7 @@ import { Sider } from './components/Sider';
 const { Content } = Layout;
 
 export function BaseLayout() {
-  const {
-    token: { padding },
-  } = theme.useToken();
+  const { token } = theme.useToken();
 
   const [collapsed, setCollapsed] = useState(false);
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -36,9 +34,17 @@ export function BaseLayout() {
         onDrawerVisibleChange={setDrawerVisible}
       />
 
-      <Layout>
+      <Layout style={{ position: 'relative', overflow: 'hidden' }}>
         <Header collapsed={isMobile ? !drawerVisible : collapsed} onToggleCollapse={onToggleCollapse} />
-        <Content style={{ padding }}>
+        <Content
+          style={{
+            padding: token.padding,
+            height: '100vh',
+            overflow: 'auto',
+            paddingTop: Number(token.Layout?.headerHeight || 64) + token.padding,
+            marginTop: -Number(token.Layout?.headerHeight || 64),
+          }}
+        >
           <Outlet />
         </Content>
       </Layout>

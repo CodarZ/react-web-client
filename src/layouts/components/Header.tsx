@@ -13,7 +13,14 @@ export function Header(props: { collapsed: boolean; onToggleCollapse: () => void
     <AntHeader
       style={{
         padding: 0,
-        zIndex: 1000,
+        background: `color-mix(in srgb, ${token.colorBgContainer}, transparent 40%)`,
+        backdropFilter: 'blur(8px) saturate(180%) brightness(1.1)',
+        WebkitBackdropFilter: 'blur(8px) saturate(180%) brightness(1.1)',
+        borderBottom: `1px solid ${token.colorSplit}`,
+        position: 'sticky',
+        top: 0,
+        zIndex: token.zIndexPopupBase - 10,
+        transition: 'all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)',
       }}
     >
       <Flex align="center" justify="space-between">
