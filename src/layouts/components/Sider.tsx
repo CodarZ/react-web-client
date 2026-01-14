@@ -21,6 +21,7 @@ interface SiderProps {
 }
 
 export function Sider({ collapsed, onCollapsedChange, drawerVisible, onDrawerVisibleChange }: SiderProps) {
+  const { token } = theme.useToken();
   const screens = Grid.useBreakpoint();
   const isMobile = !screens.md;
 
@@ -49,7 +50,7 @@ export function Sider({ collapsed, onCollapsedChange, drawerVisible, onDrawerVis
         placement="left"
         onClose={() => onDrawerVisibleChange(false)}
         open={isMobile && drawerVisible}
-        styles={{ body: { padding: 0 } }}
+        styles={{ body: { padding: 0, background: token.colorBgContainer } }}
         size={SIDER_CONFIG.width}
         closable={false}
       >
@@ -93,7 +94,12 @@ export function SiderContent(props: { collapsed?: boolean; onItemClick?: () => v
           scrollBehavior: 'smooth',
         }}
       >
-        <Menu mode="inline" selectedKeys={activeKey ? [activeKey] : []} items={menuItems} />
+        <Menu
+          mode="inline"
+          style={{ height: '100%', border: 'none' }}
+          selectedKeys={activeKey ? [activeKey] : []}
+          items={menuItems}
+        />
       </div>
     </>
   );

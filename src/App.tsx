@@ -5,16 +5,22 @@ import zhCN from 'antd/locale/zh_CN';
 
 import { router } from '@/routes/-index';
 
+import { useDeviceDarkTheme } from './hooks/useDeviceDarkTheme';
 import { AntdStaticProvider } from './libs/antd-static';
+import { useAppStore } from './stores/useAppStore';
 
 export default function App() {
   const { token } = theme.useToken();
+  const appState = useAppStore();
+  const prefersDark = useDeviceDarkTheme();
+
+  const isDark = appState.themeMode === 'auto' ? prefersDark : appState.themeMode === 'dark';
 
   return (
     <ConfigProvider
       locale={zhCN}
       theme={{
-        algorithm: theme.defaultAlgorithm,
+        algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
         token: {},
         components: {
           Layout: {

@@ -9,7 +9,14 @@ export default function LoginPage() {
   const { token } = theme.useToken();
 
   return (
-    <Flex justify="center" align="center" className={styles.container}>
+    <Flex
+      justify="center"
+      align="center"
+      className={styles.container}
+      style={{
+        background: token.colorBgContainer,
+      }}
+    >
       <Row
         className={styles.card}
         style={{

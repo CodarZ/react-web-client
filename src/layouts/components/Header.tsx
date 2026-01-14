@@ -1,11 +1,21 @@
 import { useNavigate } from '@tanstack/react-router';
 
-import { LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  DesktopOutlined,
+  LogoutOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  MoonOutlined,
+  SunOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 import { Avatar, Button, Dropdown, Flex, Layout, theme, Typography, type MenuProps } from 'antd';
 
 import { Route as LoginRoute } from '@/routes/(auth)/login';
 
+import { useDeviceDarkTheme } from '@/hooks/useDeviceDarkTheme';
 import { message, modal } from '@/libs/antd-static';
+import { useAppStore, type ThemeMode } from '@/stores/useAppStore';
 
 const { Header: AntHeader } = Layout;
 const { Text } = Typography;
@@ -16,6 +26,11 @@ export function Header(props: { collapsed: boolean; onToggleCollapse: () => void
 
   const { token } = theme.useToken();
   const navigate = useNavigate();
+
+  const appState = useAppStore();
+  const prefersDark = useDeviceDarkTheme();
+
+  const isDark = appState.themeMode === 'auto' ? prefersDark : appState.themeMode === 'dark';
 
   const items: MenuProps['items'] = [
     {
@@ -64,14 +79,13 @@ export function Header(props: { collapsed: boolean; onToggleCollapse: () => void
     <AntHeader
       style={{
         padding: 0,
-        background: `color-mix(in srgb, ${token.colorBgContainer}, transparent 40%)`,
+        background: token.colorBgContainer,
         backdropFilter: 'blur(8px) saturate(180%) brightness(1.1)',
         WebkitBackdropFilter: 'blur(8px) saturate(180%) brightness(1.1)',
         borderBottom: `1px solid ${token.colorSplit}`,
         position: 'sticky',
         top: 0,
         zIndex: token.zIndexPopupBase - 10,
-        transition: 'all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)',
       }}
     >
       <Flex align="center" justify="space-between">
@@ -88,15 +102,24 @@ export function Header(props: { collapsed: boolean; onToggleCollapse: () => void
 
         <Flex gap={token.padding} style={{ paddingRight: token.padding }}>
           <Dropdown
-            menu={{ items }}
-            placement="bottomRight"
             trigger={['click']}
-            styles={{
-              root: {
-                width: 160,
-              },
+            placement="bottomRight"
+            styles={{ root: { width: 150 } }}
+            menu={{
+              selectable: true,
+              selectedKeys: [appState.themeMode],
+              onSelect: (e) => appState.setThemeMode(e.key as ThemeMode),
+              items: [
+                { key: 'light', label: '浅色', icon: <SunOutlined /> },
+                { key: 'dark', label: '深色', icon: <MoonOutlined /> },
+                { key: 'auto', label: '跟随设备', icon: <DesktopOutlined /> },
+              ],
             }}
           >
+            <Button type="text" icon={isDark ? <MoonOutlined /> : <SunOutlined />} />
+          </Dropdown>
+
+          <Dropdown menu={{ items }} placement="bottomRight" trigger={['click']} styles={{ root: { width: 160 } }}>
             <Avatar size={32} icon={<UserOutlined />} style={{ cursor: 'pointer' }} />
           </Dropdown>
         </Flex>
