@@ -35,5 +35,3 @@ lerna-debug.log*
 .DS_Store
 ._*
 
-# 自动生成
-routeTree.gen.ts

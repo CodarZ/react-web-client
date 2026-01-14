@@ -25,7 +25,7 @@ export default defineConfig({
     preprocessorOptions: {},
   },
   build: {
-    outDir: 'build',
+    outDir: 'dist',
     sourcemap: false,
     chunkSizeWarningLimit: 2048,
     rollupOptions: {
@@ -33,7 +33,6 @@ export default defineConfig({
         manualChunks: {
           antd: ['antd'],
           icons: ['@ant-design/icons'],
-          'antd-pro': ['@ant-design/pro-components'],
           utils: ['axios', 'radash', 'dayjs'],
           tools: ['ahooks', 'zustand', 'zod'],
           react: ['react', 'react-dom'],
