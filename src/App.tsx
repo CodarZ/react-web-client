@@ -8,6 +8,8 @@ import { router } from '@/routes/-index';
 import { AntdStaticProvider } from './libs/antd-static';
 
 export default function App() {
+  const { token } = theme.useToken();
+
   return (
     <ConfigProvider
       locale={zhCN}
@@ -17,6 +19,7 @@ export default function App() {
         components: {
           Layout: {
             headerHeight: 64,
+            headerBg: token.colorBgContainer,
           },
         },
       }}
