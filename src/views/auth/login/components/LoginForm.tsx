@@ -63,18 +63,18 @@ export default function LoginForm() {
                 style={{
                   width: 70,
                   height: token.controlHeight,
-                  backgroundColor: token.colorBgContainer,
+                  backgroundColor: token.colorPrimaryBg,
                   borderRadius: token.borderRadius,
                 }}
               >
-                <PictureOutlined style={{ fontSize: 20, color: token.colorBgContainer }} />
+                <PictureOutlined style={{ fontSize: 20, color: token.colorPrimaryBg }} />
               </Flex>
             }
             fallback="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='32'%3E%3C/svg%3E"
             style={{
               width: 70,
               cursor: 'pointer',
-              backgroundColor: token.colorBgContainer,
+              backgroundColor: token.colorPrimaryBg,
               height: token.controlHeight,
               borderRadius: token.borderRadius,
             }}

@@ -1,8 +1,7 @@
 import { theme } from 'antd';
 
-import cornerBottom from '../assets/corner-bottom.svg';
-import cornerTop from '../assets/corner-top.svg';
 import styles from './LoginBackground.module.css';
+import { CornerBottomIcon, CornerTopIcon } from './SVGIcons';
 
 /** 登录页面背景装饰组件 */
 export default function LoginBackground() {
@@ -11,13 +10,21 @@ export default function LoginBackground() {
   return (
     <div className={styles.container}>
       {/* 右上角主题色不规则形状 */}
-      <div className={`${styles.cornerDecor} ${styles.cornerTop}`}>
-        <img src={cornerTop} alt="" className={styles.cornerImg} />
+      <div className={`${styles.cornerTop}`}>
+        <CornerTopIcon
+          className={styles.cornerImg}
+          primaryColor={token.colorPrimary}
+          secondaryColor={token.colorPrimaryBorderHover}
+        />
       </div>
 
       {/* 左下角主题色不规则形状 */}
-      <div className={`${styles.cornerDecor} ${styles.cornerBottom}`}>
-        <img src={cornerBottom} alt="" className={styles.cornerImg} />
+      <div className={`${styles.cornerBottom}`}>
+        <CornerBottomIcon
+          className={styles.cornerImg}
+          primaryColor={token.colorPrimary}
+          secondaryColor={token.colorPrimaryBorderHover}
+        />
       </div>
 
       {/* 浮动装饰圆形 */}

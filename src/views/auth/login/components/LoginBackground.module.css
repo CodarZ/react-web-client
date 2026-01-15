@@ -5,11 +5,6 @@
   overflow: hidden;
 }
 
-/* 角落装饰图片定位基础样式 */
-.cornerDecor {
-  position: absolute;
-}
-
 /* 角落图片通用样式 */
 .cornerImg {
   width: 100%;
@@ -18,12 +13,14 @@
 
 /* 右上角装饰 */
 .cornerTop {
+  position: absolute;
   top: -960px;
   right: -688px;
 }
 
 /* 左下角装饰 */
 .cornerBottom {
+  position: absolute;
   bottom: -600px;
   left: -300px;
 }
@@ -31,7 +28,7 @@
 /* 浮动圆形基础样式 */
 .flyCircle {
   position: absolute;
-  animation: float 6s ease-in-out infinite;
+  animation: float 5.2s ease-in-out infinite;
   border-radius: 50%;
 }
 
@@ -40,14 +37,14 @@
   top: 80px;
   left: 200px;
   animation-delay: 0s;
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
 }
 
 .circle2 {
   top: 300px;
   right: 150px;
-  animation-delay: 1s;
+  animation-delay: 0.8s;
   width: 80px;
   height: 80px;
 }
@@ -55,7 +52,7 @@
 .circle3 {
   bottom: 100px;
   left: 100px;
-  animation-delay: 2s;
+  animation-delay: 1.4s;
   width: 60px;
   height: 60px;
 }
@@ -63,7 +60,7 @@
 .circle4 {
   right: 300px;
   bottom: 200px;
-  animation-delay: 3s;
+  animation-delay: 2.6s;
   width: 100px;
   height: 100px;
 }
@@ -75,6 +72,6 @@
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-20px);
+    transform: translateY(-16px);
   }
 }

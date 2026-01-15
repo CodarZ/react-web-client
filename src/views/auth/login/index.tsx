@@ -1,8 +1,8 @@
 import { Col, Flex, Row, theme } from 'antd';
 
-import FormLeft from './assets/form-left.svg';
 import LoginBackground from './components/LoginBackground';
 import LoginForm from './components/LoginForm';
+import { FormLeftIcon } from './components/SVGIcons';
 import styles from './index.module.css';
 
 export default function LoginPage() {
@@ -33,7 +33,11 @@ export default function LoginPage() {
               background: `linear-gradient(60deg,${token.colorPrimary},${token.colorPrimaryBorderHover}`,
             }}
           >
-            <img src={FormLeft} className={styles.illustration} />
+            <FormLeftIcon
+              className={styles.illustration}
+              primaryColor={token.colorPrimaryActive}
+              secondaryColor={token.colorPrimaryBg}
+            />
           </Flex>
         </Col>
         <Col xs={24} sm={12} md={10} style={{ height: '100%' }}>
