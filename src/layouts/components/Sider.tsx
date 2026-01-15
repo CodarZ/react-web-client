@@ -99,6 +99,7 @@ export function SiderContent(props: { collapsed?: boolean; onItemClick?: () => v
           style={{ height: '100%', border: 'none' }}
           selectedKeys={activeKey ? [activeKey] : []}
           items={menuItems}
+          theme="light"
         />
       </div>
     </>

@@ -23,11 +23,11 @@ export const useAppStore = create<AppState & AppActions>()(
   persist(
     (set) => ({
       themeMode: 'auto',
-      colorPrimary: '#1677ff',
+      colorPrimary: '#722ed1',
 
       setThemeMode: (mode) => set({ themeMode: mode }),
       setColorPrimary: (color) => set({ colorPrimary: color }),
-      resetAppState: () => set({ themeMode: 'auto', colorPrimary: '#1677ff' }),
+      resetAppState: () => set({ themeMode: 'auto', colorPrimary: '#722ed1' }),
     }),
     { name: 'app' },
   ),

@@ -164,17 +164,7 @@ function SettingsDrawer(props: { open: boolean; onClose: () => void }) {
   const { token } = theme.useToken();
   const appState = useAppStore();
 
-  const primaryColors = [
-    '#1677ff',
-    '#0091ff',
-    '#f5222d',
-    '#fa8c16',
-    '#fadb14',
-    '#13c2c2',
-    '#52c41a',
-    '#2f54eb',
-    '#722ed1',
-  ];
+  const primaryColors = ['#165dff', '#722ed1', '#2f54eb', '#f5222d', '#fe6637', '#13c2c2', '#52c41a'];
 
   return (
     <Drawer
