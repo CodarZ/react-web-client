@@ -9,11 +9,24 @@ import './styles/index.css';
 
 dayjs.locale('zh-cn');
 
-const rootElement = document.getElementById('root');
-if (rootElement) {
-  createRoot(rootElement).render(
-    <StrictMode>
-      <App />
-    </StrictMode>,
-  );
+async function stupApp() {
+  if (import.meta.env.DEV && import.meta.env.VITE_USE_MOCK === 'true') {
+    const { startMockServiceWorker, getMockEnabledModules } = await import('@/mocks');
+    await startMockServiceWorker({ onUnhandledRequest: 'bypass' });
+
+    const enabledModules = getMockEnabledModules();
+    console.log('[MSW] Mock Service Worker 已启动');
+    console.log('[MSW] 启用 Mock 的模块:', enabledModules);
+  }
+
+  const rootElement = document.getElementById('root');
+  if (rootElement) {
+    createRoot(rootElement).render(
+      <StrictMode>
+        <App />
+      </StrictMode>,
+    );
+  }
 }
+
+stupApp();

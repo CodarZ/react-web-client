@@ -51,6 +51,16 @@
           }
         }
       }
+    },
+    {
+      "includes": ["**/mocks/modules/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noExplicitAny": "off"
+          }
+        }
+      }
     }
   ],
   "javascript": {},
