@@ -4,6 +4,6 @@
     "esbenp.prettier-vscode",
     "christian-kohler.npm-intellisense",
     "christian-kohler.path-intellisense",
-    "clinyong.vscode-css-modules"
+    "clinyong.vscode-css-modules",
   ]
 }

@@ -1,1 +1,12 @@
 /* 全局样式 */
+* {
+  scrollbar-width: thin;
+}
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-track {
+  border: none;
+  background: transparent;
+}

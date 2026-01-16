@@ -56,59 +56,21 @@
     "source.organizeImports.biome": "never"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[scss]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[shellscript]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
-  "[dotenv]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
-  "[ignore]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
-  "[.editorconfig]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
-  "[properties]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
 
+  "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.suggest.paths": false,
   "javascript.suggest.paths": false,
 
   // files
   "files.simpleDialog.enable": true,
   "files.trimTrailingWhitespace": true,
+  "files.trimFinalNewlines": true,
+  "files.insertFinalNewline": true,
   "files.associations": {
     "*.json": "jsonc",
     "*rc": "jsonc",
     ".*ignore": "ignore",
+    ".env*": "dotenv"
   },
   "files.exclude": {
     ".git": true,
@@ -130,5 +92,10 @@
     "**/*.{yaml,lock}": true,
     "**/*{biome,eslint,prettier,stylelint}*": true
   },
-  "typescript.tsdk": "node_modules/typescript/lib",
+
+  // path intellisense
+  "path-intellisense.mappings": {
+    "@": "${workspaceRoot}/src",
+    "~": "${workspaceRoot}"
+  }
 }
