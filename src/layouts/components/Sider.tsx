@@ -154,7 +154,7 @@ export function SiderLogo(props: { collapsed: boolean }) {
           transition: 'opacity 0.2s cubic-bezier(0.645, 0.045, 0.355, 1)',
         }}
       >
-        React Web Client
+        {import.meta.env.VITE_APP_NAME}
       </span>
     </Flex>
   );
