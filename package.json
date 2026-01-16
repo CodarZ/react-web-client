@@ -9,6 +9,7 @@
     "type:check": "tsc --noEmit",
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:mock": "tsc -b && vite build --mode development",
     "preview": "vite preview",
     "format:check": "prettier --check . --log-level warn",
     "format:fix": "prettier --write . | sed '/(unchanged)/d'",

@@ -10,7 +10,7 @@ import './styles/index.css';
 dayjs.locale('zh-cn');
 
 async function stupApp() {
-  if (import.meta.env.DEV && import.meta.env.VITE_USE_MOCK === 'true') {
+  if (import.meta.env.VITE_USE_MOCK === 'true') {
     const { startMockServiceWorker, getMockEnabledModules } = await import('@/mocks');
     await startMockServiceWorker({ onUnhandledRequest: 'bypass' });
 
