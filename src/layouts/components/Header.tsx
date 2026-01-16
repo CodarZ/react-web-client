@@ -34,6 +34,8 @@ import { useDeviceDarkTheme } from '@/hooks/useDeviceDarkTheme';
 import { message, modal } from '@/libs/antd-static';
 import { useAppStore, type ThemeMode } from '@/stores/useAppStore';
 
+import { logoutApi } from '@/apis/auth';
+
 import autoSvg from '../assets/theme/auto.svg';
 import darkSvg from '../assets/theme/dark.svg';
 import lightSvg from '../assets/theme/light.svg';
@@ -61,14 +63,22 @@ export function Header(props: { collapsed: boolean; onToggleCollapse: () => void
 
   const [settingsDrawer, setSettingsDrawer] = useState(false);
 
+  const userInfo = (() => {
+    try {
+      return JSON.parse(localStorage.getItem('userInfo') || '{}');
+    } catch {
+      return {};
+    }
+  })();
+
   const items: MenuProps['items'] = [
     {
       key: '1',
       label: (
         <Flex vertical={true} style={{ cursor: 'default' }} onClick={(e) => e.preventDefault()}>
-          <Text strong={true}>超级管理员</Text>
+          <Text strong={true}>{userInfo.nickname || '未登录'}</Text>
           <Text style={{ width: 130 }} type="secondary" ellipsis={true}>
-            admin@react-web-client
+            {userInfo.username || 'user'}
           </Text>
         </Flex>
       ),
@@ -91,8 +101,9 @@ export function Header(props: { collapsed: boolean; onToggleCollapse: () => void
         const hide = message.loading('正在退出...', 0);
 
         try {
-          // 发送请求、清理状态、清理缓存
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+          await logoutApi();
+          localStorage.removeItem('token');
+          localStorage.removeItem('userInfo');
           hide();
           message.success('退出成功');
           navigate({ to: LoginRoute.to, replace: true });

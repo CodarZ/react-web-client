@@ -1,10 +1,14 @@
 import { useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { LockOutlined, PictureOutlined, SafetyCertificateOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Flex, Form, Image, Input, theme } from 'antd';
+import { Button, Checkbox, Flex, Form, Image, Input, Spin, theme } from 'antd';
+
+import { useMount } from 'ahooks';
 
 import { message } from '@/libs/antd-static';
+
+import { getCaptchaApi, loginApi } from '@/apis/auth';
 
 interface LoginFormValues {
   username: string;
@@ -15,24 +19,56 @@ interface LoginFormValues {
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
+  const [captchaLoading, setCaptchaLoading] = useState(false);
+  const [captchaUrl, setCaptchaUrl] = useState<string | null>(null);
   const [form] = Form.useForm<LoginFormValues>();
   const { token } = theme.useToken();
   const navigate = useNavigate();
+  const fetchedRef = useRef(false);
 
-  function onFinish(values: LoginFormValues) {
+  const fetchCaptcha = async () => {
+    setCaptchaLoading(true);
+    try {
+      const data = await getCaptchaApi();
+      setCaptchaUrl(data);
+    } catch (err) {
+      console.error('获取验证码失败:', err);
+    } finally {
+      setCaptchaLoading(false);
+    }
+  };
+
+  useMount(() => {
+    if (!fetchedRef.current) {
+      fetchCaptcha();
+      fetchedRef.current = true;
+    }
+  });
+
+  async function onFinish(values: LoginFormValues) {
     console.log('登录表单提交:', values);
 
     setLoading(true);
 
-    setTimeout(() => {
-      setLoading(false);
-      message.info('登录成功！');
+    try {
+      const data = await loginApi(values);
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('userInfo', JSON.stringify(data.userInfo));
+
+      message.success('登录成功！');
       navigate({ to: '/' });
-    }, 2000);
+    } catch (err: unknown) {
+      const error = err as Error;
+      message.error(error.message || '登录失败');
+      // 登录失败通常需要刷新验证码
+      fetchCaptcha();
+    } finally {
+      setLoading(false);
+    }
   }
 
   function onRefreshCaptcha() {
-    console.log('刷新验证码图片 URL');
+    fetchCaptcha();
   }
 
   return (
@@ -50,35 +86,39 @@ export default function LoginForm() {
           <Form.Item name="captcha" noStyle={true} rules={[{ required: true, message: '请输入验证码' }]}>
             <Input prefix={<SafetyCertificateOutlined />} placeholder="验证码" style={{ flex: 1 }} />
           </Form.Item>
-          <Image
-            src=""
-            alt="验证码"
-            onClick={onRefreshCaptcha}
-            title="点击刷新验证码"
-            preview={false}
-            placeholder={
-              <Flex
-                align="center"
-                justify="center"
-                style={{
-                  width: 70,
-                  height: token.controlHeight,
-                  backgroundColor: token.colorPrimaryBg,
-                  borderRadius: token.borderRadius,
-                }}
-              >
-                <PictureOutlined style={{ fontSize: 20, color: token.colorPrimaryBg }} />
-              </Flex>
-            }
-            fallback="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='32'%3E%3C/svg%3E"
-            style={{
-              width: 70,
-              cursor: 'pointer',
-              backgroundColor: token.colorPrimaryBg,
-              height: token.controlHeight,
-              borderRadius: token.borderRadius,
-            }}
-          />
+          <Spin spinning={captchaLoading} size="small">
+            <Image
+              src={captchaUrl || undefined}
+              alt="验证码"
+              onClick={onRefreshCaptcha}
+              title="点击刷新验证码"
+              preview={false}
+              placeholder={
+                <Flex
+                  align="center"
+                  justify="center"
+                  style={{
+                    width: 70,
+                    height: token.controlHeight,
+                    backgroundColor: token.colorPrimaryBg,
+                    borderRadius: token.borderRadius,
+                  }}
+                >
+                  <PictureOutlined style={{ fontSize: 20, color: token.colorPrimaryBg }} />
+                </Flex>
+              }
+              fallback="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='32'%3E%3C/svg%3E"
+              style={{
+                width: 70,
+                cursor: 'pointer',
+                backgroundColor: token.colorPrimaryBg,
+                height: token.controlHeight,
+                borderRadius: token.borderRadius,
+                flexShrink: 0,
+                display: 'inline-block',
+              }}
+            />
+          </Spin>
         </Flex>
       </Form.Item>
 
