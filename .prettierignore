@@ -33,7 +33,6 @@ env/
 
 # 自动生成
 routeTree.gen.ts
-**/auto/**
 
 # 本地文件
 discard
