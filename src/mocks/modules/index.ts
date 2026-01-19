@@ -7,13 +7,21 @@ export const handlers: RequestHandler[] = loadEnabledHandlers();
 
 /** 依据 `../config.ts` 自动处理 handlers */
 function loadEnabledHandlers(): RequestHandler[] {
-  const allModules = import.meta.glob<Record<string, any>>('./*.ts', { eager: true });
+  const allFileModules = import.meta.glob<Record<string, any>>('./*.ts', { eager: true });
+  const allDirModules = import.meta.glob<Record<string, any>>('./*/index.ts', { eager: true });
   const handlers: RequestHandler[] = [];
 
   for (const config of MockModules) {
     if (config.enabled) {
-      const path = `./${config.name}.ts`;
-      const module = allModules[path];
+      // 1. 优先加载配置中直接定义的 handlers (如 Orval 生成的)
+      if (Array.isArray(config.handlers) && config.handlers.length > 0) {
+        handlers.push(...config.handlers);
+      }
+
+      // 2. 尝试加载文件定义的 handlers (手动编写的)
+      const filePath = `./${config.name}.ts`;
+      const dirPath = `./${config.name}/index.ts`;
+      const module = allFileModules[filePath] || allDirModules[dirPath];
 
       if (module) {
         const moduleHandlers = getModuleHandlers(module, config.name);
@@ -21,10 +29,18 @@ function loadEnabledHandlers(): RequestHandler[] {
         if (Array.isArray(moduleHandlers)) {
           handlers.push(...moduleHandlers);
         } else {
-          console.warn(`[MSW] 模块 "${config.name}" 已启用, 但在 ${path} 中找不到有效的 handlers 导出`);
+          // 如果没有配置 handlers, 且文件中也没有, 则警告
+          if (!config.handlers) {
+            console.warn(
+              `[MSW] 模块 "${config.name}" 已启用, 但在 "${module === allFileModules[filePath] ? filePath : dirPath}" 中找不到有效的 handlers 导出`,
+            );
+          }
         }
       } else {
-        console.warn(`[MSW] 配置了模块 "${config.name}", 但找不到对应的文件 ${path}`);
+        // 如果没有配置 handlers, 且也没找到文件, 则警告
+        if (!config.handlers) {
+          console.warn(`[MSW] 配置了模块 "${config.name}", 但找不到对应的文件 ${filePath} 或 ${dirPath}`);
+        }
       }
     }
   }

@@ -1,3 +1,5 @@
+import type { RequestHandler } from 'msw';
+
 /**
  * Mock 模块配置
  *
@@ -27,6 +29,12 @@ export interface MockModuleConfig {
   pathPrefixes: string[];
   /** 备注说明 */
   description?: string;
+  /**
+   * 预定义的 Handlers 列表
+   * 用于集成如 Orval 生成的 mock 数据
+   * 优先级高于本地文件定义的 mock
+   */
+  handlers?: RequestHandler[];
 }
 
 /** Mock 模块配置列表 */

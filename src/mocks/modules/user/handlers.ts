@@ -1,5 +1,7 @@
 import { delay, http, HttpResponse } from 'msw';
 
+import { fakeUser } from './data';
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
 export const userHandlers = [
@@ -8,12 +10,9 @@ export const userHandlers = [
     await delay(500);
 
     return HttpResponse.json({
-      code: 0,
+      code: 200,
       msg: '请求成功',
-      data: {
-        id: params.id,
-        name: 'test',
-      },
+      data: fakeUser({ id: params.id as string }),
     });
   }),
 
@@ -24,13 +23,13 @@ export const userHandlers = [
     await delay(800);
 
     return HttpResponse.json({
-      code: 0,
+      code: 200,
       msg: '用户信息更新成功！',
-      data: {
-        id: body.id || 'unknown',
-        name: body.name || 'new user',
+      data: fakeUser({
+        id: body.id,
+        name: body.name,
         updatedAt: new Date().toISOString(),
-      },
+      }),
     });
   }),
 ];
