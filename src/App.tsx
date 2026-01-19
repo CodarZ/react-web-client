@@ -1,3 +1,4 @@
+import { QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider } from '@tanstack/react-router';
 
 import { App as AntdApp, ConfigProvider, theme } from 'antd';
@@ -5,9 +6,10 @@ import zhCN from 'antd/locale/zh_CN';
 
 import { router } from '@/routes/-index';
 
-import { useDeviceDarkTheme } from './hooks/useDeviceDarkTheme';
-import { AntdStaticProvider } from './libs/antd-static';
-import { useAppStore } from './stores/useAppStore';
+import { useDeviceDarkTheme } from '@/hooks/useDeviceDarkTheme';
+import { AntdStaticProvider } from '@/libs/antd-static';
+import queryClient from '@/libs/query-client';
+import { useAppStore } from '@/stores/useAppStore';
 
 export default function App() {
   const { token } = theme.useToken();
@@ -17,25 +19,27 @@ export default function App() {
   const isDark = appState.themeMode === 'auto' ? prefersDark : appState.themeMode === 'dark';
 
   return (
-    <ConfigProvider
-      locale={zhCN}
-      theme={{
-        algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
-        token: {
-          colorPrimary: appState.colorPrimary,
-        },
-        components: {
-          Layout: {
-            headerHeight: 64,
-            headerBg: token.colorBgContainer,
+    <QueryClientProvider client={queryClient}>
+      <ConfigProvider
+        locale={zhCN}
+        theme={{
+          algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
+          token: {
+            colorPrimary: appState.colorPrimary,
           },
-        },
-      }}
-    >
-      <AntdApp message={{ maxCount: 3 }} notification={{ maxCount: 3 }}>
-        <AntdStaticProvider />
-        <RouterProvider router={router} />
-      </AntdApp>
-    </ConfigProvider>
+          components: {
+            Layout: {
+              headerHeight: 64,
+              headerBg: token.colorBgContainer,
+            },
+          },
+        }}
+      >
+        <AntdApp message={{ maxCount: 3 }} notification={{ maxCount: 3 }}>
+          <AntdStaticProvider />
+          <RouterProvider router={router} />
+        </AntdApp>
+      </ConfigProvider>
+    </QueryClientProvider>
   );
 }
