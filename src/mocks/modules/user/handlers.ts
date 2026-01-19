@@ -1,10 +1,21 @@
 import { delay, http, HttpResponse } from 'msw';
 
-import { fakeUser } from './data';
+import { fakeUser, fakeUsers } from './data';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
 export const userHandlers = [
+  /** 获取用户列表 */
+  http.get(`${BASE_URL}/user/list`, async () => {
+    await delay(2000);
+
+    return HttpResponse.json({
+      code: 200,
+      msg: '请求成功',
+      data: fakeUsers(5),
+    });
+  }),
+
   /** 根据 ID 获取用户信息 */
   http.get(`${BASE_URL}/user/:id`, async ({ params }) => {
     await delay(500);

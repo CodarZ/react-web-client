@@ -28,13 +28,12 @@ import {
   type MenuProps,
 } from 'antd';
 
+import { useLogout } from '@/apis';
 import { Route as LoginRoute } from '@/routes/(auth)/login';
 
 import { useDeviceDarkTheme } from '@/hooks/useDeviceDarkTheme';
 import { message, modal } from '@/libs/antd-static';
 import { useAppStore, type ThemeMode } from '@/stores/useAppStore';
-
-import { logoutApi } from '@/apis/auth';
 
 import autoSvg from '../assets/theme/auto.svg';
 import darkSvg from '../assets/theme/dark.svg';
@@ -54,6 +53,7 @@ export function Header(props: { collapsed: boolean; onToggleCollapse: () => void
   const { collapsed, onToggleCollapse } = props;
 
   const { token } = theme.useToken();
+  const { mutate: logout } = useLogout();
   const navigate = useNavigate();
 
   const appState = useAppStore();
@@ -97,20 +97,18 @@ export function Header(props: { collapsed: boolean; onToggleCollapse: () => void
       content: '您确定要退出登录吗？您需要重新登录才能访问您的帐户。',
       centered: true,
       maskClosable: true,
-      onOk: async () => {
-        const hide = message.loading('正在退出...', 0);
-
-        try {
-          await logoutApi();
-          localStorage.removeItem('token');
-          localStorage.removeItem('userInfo');
-          hide();
-          message.success('退出成功');
-          navigate({ to: LoginRoute.to, replace: true });
-        } catch {
-          hide();
-          message.error('退出失败，请稍后重试！');
-        }
+      onOk: () => {
+        logout(undefined, {
+          onSuccess: () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('userInfo');
+            message.success('退出成功');
+            navigate({ to: LoginRoute.to, replace: true });
+          },
+          onError: () => {
+            message.error('退出失败，请稍后重试！');
+          },
+        });
       },
     });
   }

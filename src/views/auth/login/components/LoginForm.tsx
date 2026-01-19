@@ -6,9 +6,9 @@ import { Button, Checkbox, Flex, Form, Image, Input, Spin, theme } from 'antd';
 
 import { useMount } from 'ahooks';
 
-import { message } from '@/libs/antd-static';
+import { getCaptchaApi, useLogin } from '@/apis';
 
-import { getCaptchaApi, loginApi } from '@/apis/auth';
+import { message } from '@/libs/antd-static';
 
 interface LoginFormValues {
   username: string;
@@ -18,7 +18,7 @@ interface LoginFormValues {
 }
 
 export default function LoginForm() {
-  const [loading, setLoading] = useState(false);
+  const { mutate: login, isPending: loading } = useLogin();
   const [captchaLoading, setCaptchaLoading] = useState(false);
   const [captchaUrl, setCaptchaUrl] = useState<string | null>(null);
   const [form] = Form.useForm<LoginFormValues>();
@@ -45,26 +45,23 @@ export default function LoginForm() {
     }
   });
 
-  async function onFinish(values: LoginFormValues) {
+  function onFinish(values: LoginFormValues) {
     console.log('登录表单提交:', values);
 
-    setLoading(true);
+    login(values, {
+      onSuccess: (data) => {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userInfo', JSON.stringify(data.userInfo));
 
-    try {
-      const data = await loginApi(values);
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('userInfo', JSON.stringify(data.userInfo));
-
-      message.success('登录成功！');
-      navigate({ to: '/' });
-    } catch (err: unknown) {
-      const error = err as Error;
-      message.error(error.message || '登录失败');
-      // 登录失败通常需要刷新验证码
-      fetchCaptcha();
-    } finally {
-      setLoading(false);
-    }
+        message.success('登录成功！');
+        navigate({ to: '/' });
+      },
+      onError: (err) => {
+        message.error(err.message || '登录失败');
+        // 登录失败通常需要刷新验证码
+        fetchCaptcha();
+      },
+    });
   }
 
   function onRefreshCaptcha() {
