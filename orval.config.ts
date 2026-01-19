@@ -35,10 +35,10 @@ function createServiceConfig(config: ServiceConfig) {
       locale: 'zh_CN',
     },
     override: {
-      // mutator: {
-      //   path: './src/apis/request/mutator.ts',
-      //   name: 'customInstance',
-      // },
+      mutator: {
+        path: './src/apis/request/mutator.ts',
+        name: 'orvalMutator',
+      },
       query: {
         signal: true,
         options: {
