@@ -23,7 +23,7 @@ export const userHandlers = [
     return HttpResponse.json({
       code: 200,
       msg: '请求成功',
-      data: fakeUser({ id: params.id as string }),
+      data: fakeUser({ id: Number(params.id) }),
     });
   }),
 
@@ -38,8 +38,8 @@ export const userHandlers = [
       msg: '用户信息更新成功！',
       data: fakeUser({
         id: body.id,
-        name: body.name,
-        updatedAt: new Date().toISOString(),
+        username: body.username,
+        nickname: body.nickname,
       }),
     });
   }),

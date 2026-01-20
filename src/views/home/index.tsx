@@ -21,17 +21,19 @@ const roleColorMap: Record<string, string> = {
 
 /** 表格列定义 */
 const columns: ColumnsType<User> = [
+  { title: 'ID', dataIndex: 'id', width: 60 },
   {
     title: '头像',
     dataIndex: 'avatar',
     width: 60,
     render: (avatar: string) => <Avatar src={avatar} size="small" />,
   },
-  { title: '姓名', dataIndex: 'name', width: 120 },
+  { title: '姓名', dataIndex: 'username', width: 120 },
+  { title: '昵称', dataIndex: 'nickname', width: 120 },
   { title: '邮箱', dataIndex: 'email', width: 200 },
   {
     title: '角色',
-    dataIndex: 'role',
+    dataIndex: 'roles',
     width: 100,
     render: (role: string) => <Tag color={roleColorMap[role]}>{role}</Tag>,
   },

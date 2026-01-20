@@ -4,12 +4,13 @@ import { type User, UserSchema } from './schema';
 
 export const fakeUser = (overrides?: Partial<User>): User => {
   const data = {
-    id: faker.string.uuid(),
-    name: faker.person.fullName(),
+    id: faker.number.int({ min: 1, max: 999999 }),
+    username: faker.internet.username(),
+    nickname: faker.person.fullName(),
     email: faker.internet.email(),
     avatar: faker.image.avatar(),
-    role: faker.helpers.arrayElement(['admin', 'user', 'guest'] as const),
-    updatedAt: faker.date.recent().toISOString(),
+    roles: faker.helpers.arrayElements(['admin', 'user', 'guest'], { min: 1, max: 2 }),
+    permissions: faker.helpers.arrayElements(['read', 'write', 'delete', 'manage'], { min: 1, max: 3 }),
     ...overrides,
   };
 

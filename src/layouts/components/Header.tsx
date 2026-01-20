@@ -1,4 +1,3 @@
-import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import {
@@ -29,11 +28,11 @@ import {
 } from 'antd';
 
 import { useLogout } from '@/apis';
-import { Route as LoginRoute } from '@/routes/(auth)/login';
 
 import { useDeviceDarkTheme } from '@/hooks/useDeviceDarkTheme';
 import { message, modal } from '@/libs/antd-static';
 import { useAppStore, type ThemeMode } from '@/stores/useAppStore';
+import { useUserStore } from '@/stores/useUserStore';
 
 import autoSvg from '../assets/theme/auto.svg';
 import darkSvg from '../assets/theme/dark.svg';
@@ -54,7 +53,6 @@ export function Header(props: { collapsed: boolean; onToggleCollapse: () => void
 
   const { token } = theme.useToken();
   const { mutate: logout } = useLogout();
-  const navigate = useNavigate();
 
   const appState = useAppStore();
   const prefersDark = useDeviceDarkTheme();
@@ -63,22 +61,16 @@ export function Header(props: { collapsed: boolean; onToggleCollapse: () => void
 
   const [settingsDrawer, setSettingsDrawer] = useState(false);
 
-  const userInfo = (() => {
-    try {
-      return JSON.parse(localStorage.getItem('userInfo') || '{}');
-    } catch {
-      return {};
-    }
-  })();
+  const userInfo = useUserStore((s) => s.userInfo);
 
   const items: MenuProps['items'] = [
     {
       key: '1',
       label: (
         <Flex vertical={true} style={{ cursor: 'default' }} onClick={(e) => e.preventDefault()}>
-          <Text strong={true}>{userInfo.nickname || '未登录'}</Text>
+          <Text strong={true}>{userInfo?.nickname || '用户'}</Text>
           <Text style={{ width: 130 }} type="secondary" ellipsis={true}>
-            {userInfo.username || 'user'}
+            {userInfo?.username}
           </Text>
         </Flex>
       ),
@@ -100,12 +92,11 @@ export function Header(props: { collapsed: boolean; onToggleCollapse: () => void
       onOk: () => {
         logout(undefined, {
           onSuccess: () => {
-            localStorage.removeItem('token');
-            localStorage.removeItem('userInfo');
+            useUserStore.getState().logout();
             message.success('退出成功');
-            navigate({ to: LoginRoute.to, replace: true });
           },
           onError: () => {
+            useUserStore.getState().logout();
             message.error('退出失败，请稍后重试！');
           },
         });
@@ -157,7 +148,7 @@ export function Header(props: { collapsed: boolean; onToggleCollapse: () => void
             <Button type="text" icon={<SettingOutlined />} onClick={() => setSettingsDrawer(true)} />
 
             <Dropdown menu={{ items }} placement="bottomRight" trigger={['click']} styles={{ root: { width: 160 } }}>
-              <Avatar size={32} icon={<UserOutlined />} style={{ cursor: 'pointer' }} />
+              <Avatar size={32} src={userInfo?.avatar} icon={<UserOutlined />} style={{ cursor: 'pointer' }} />
             </Dropdown>
           </Flex>
         </Flex>

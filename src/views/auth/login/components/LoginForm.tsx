@@ -9,6 +9,7 @@ import { useMount } from 'ahooks';
 import { getCaptchaApi, useLogin } from '@/apis';
 
 import { message } from '@/libs/antd-static';
+import { useUserStore } from '@/stores/useUserStore';
 
 interface LoginFormValues {
   username: string;
@@ -50,8 +51,7 @@ export default function LoginForm() {
 
     login(values, {
       onSuccess: (data) => {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('userInfo', JSON.stringify(data.userInfo));
+        useUserStore.getState().login(data);
 
         message.success('登录成功！');
         navigate({ to: '/' });

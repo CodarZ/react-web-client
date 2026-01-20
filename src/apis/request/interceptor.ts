@@ -1,6 +1,7 @@
 import type { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 import { message } from '@/libs/antd-static';
+import { useUserStore } from '@/stores/useUserStore';
 
 /** HTTP 状态码对应的默认错误信息 */
 export const STATUS_MESSAGE: Record<number, string> = {
@@ -18,8 +19,7 @@ export const STATUS_MESSAGE: Record<number, string> = {
 
 /** 请求拦截器 */
 export function requestInterceptor(config: InternalAxiosRequestConfig) {
-  // TODO: 暂时 token 存储在 localStorage 中, key 为 'token'
-  const token = localStorage.getItem('token');
+  const token = useUserStore.getState().token;
   if (token) {
     config.headers.set('Authorization', `Bearer ${token}`);
   }
@@ -63,11 +63,7 @@ export function responseErrorInterceptor(error: AxiosError) {
 
 /** 处理 401 等未授权情况 */
 function handleUnauthorized(): void {
-  localStorage.removeItem('token');
-  // 避免重复跳转
-  if (window.location.pathname !== '/login') {
-    window.location.href = '/login';
-  }
+  useUserStore.getState().logout();
 }
 
 /**
