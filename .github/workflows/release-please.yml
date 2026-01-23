@@ -46,10 +46,18 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         run: pnpm build
 
+      # 打包构建产物
+      - name: 打包构建产物
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          cd dist
+          zip -r ../dist.zip .
+          cd ..
+          tar -czf dist.tar.gz -C dist .
       # 上传构建产物到 GitHub Release
       - name: 上传发布产物
         if: ${{ steps.release.outputs.release_created }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ steps.release.outputs.tag_name }} dist/* --clobber
+          gh release upload ${{ steps.release.outputs.tag_name }} dist.zip dist.tar.gz --clobber
