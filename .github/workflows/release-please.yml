@@ -1,0 +1,55 @@
+name: 自动发布
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 创建发布 PR / 发布版本
+        uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          release-type: node
+          config-file: .github/release-please-config.json
+
+      # 以下步骤仅在有新版本发布时执行
+      - name: 检出代码
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v4
+
+      - name: 安装 pnpm
+        if: ${{ steps.release.outputs.release_created }}
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: 安装 Node.js
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: 安装依赖
+        if: ${{ steps.release.outputs.release_created }}
+        run: pnpm install --frozen-lockfile
+
+      - name: 构建项目
+        if: ${{ steps.release.outputs.release_created }}
+        run: pnpm build
+
+      # 上传构建产物到 GitHub Release
+      - name: 上传发布产物
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ steps.release.outputs.tag_name }} dist/* --clobber
