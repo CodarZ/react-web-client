@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/CodarZ/react-web-client/compare/v1.0.0...v1.0.1) (2026-01-23)
+
+
+### Bug Fixes
+
+* add packages field to pnpm-workspace.yaml ([568517b](https://github.com/CodarZ/react-web-client/commit/568517b658adb81b6e76415634387ff45eb08c9b))
+
 ## 1.0.0 (2026-01-23)
 
 
