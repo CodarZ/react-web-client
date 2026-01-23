@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/CodarZ/react-web-client/compare/v1.0.1...v1.0.2) (2026-01-23)
+
+
+### Bug Fixes
+
+* 打包构建产物 ([0eeac6c](https://github.com/CodarZ/react-web-client/commit/0eeac6ca08c7bfcdab1585a0caf46e862301b7bf))
+
 ## [1.0.1](https://github.com/CodarZ/react-web-client/compare/v1.0.0...v1.0.1) (2026-01-23)
 
 
